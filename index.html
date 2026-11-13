@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reproductor físico de audiolibros · Modelo 3D</title>
+<meta name="description" content="Modelo 3D interactivo del reproductor físico de audiolibros con interacción táctil y auditiva sin pantalla. Julián David Martínez Benavides, Diseño Industrial, Universidad del Norte.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+<style>
+  :root {
+    --bg: #F7FBFA;
+    --ink: #1E3836;
+    --text: #33504E;
+    --teal: #4E8584;
+    --dark: #2E4A48;
+    --mint: #A6DFD5;
+    --mint-soft: #E6F5F2;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Poppins', Arial, sans-serif; }
+  body { padding: 18px; min-height: 100vh; }
+  .frame { border: 5px solid var(--teal); padding: 10px; min-height: calc(100vh - 36px); }
+  .frame2 { border: 3px solid var(--mint); min-height: calc(100vh - 66px); padding: clamp(20px, 4vw, 56px); display: flex; flex-direction: column; gap: 32px; }
+
+  header { display: flex; flex-direction: column; gap: 10px; }
+  .eyebrow { font-family: 'Montserrat', Arial, sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 5px; color: #3C6E6B; margin: 0; }
+  h1 { font-family: 'Montserrat', Arial, sans-serif; font-weight: 800; font-size: clamp(26px, 4vw, 46px); line-height: 1.1; letter-spacing: 1px; color: var(--ink); margin: 0; max-width: 22ch; }
+  .by { margin: 0; font-size: 16px; }
+
+  main { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(280px, 1fr); gap: 32px; align-items: start; }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+
+  .viewer-wrap { position: relative; background: #fff; border: 3px solid var(--mint); }
+  model-viewer:not(:defined) > * { display: none; }
+  model-viewer {
+    display: block;
+    width: 100%; height: min(72vh, 680px); min-height: 380px;
+    background: radial-gradient(circle at 50% 40%, #FFFFFF 0%, var(--mint-soft) 100%);
+    --poster-color: transparent;
+    --progress-bar-color: var(--teal);
+  }
+  .toolbar { display: flex; flex-wrap: wrap; gap: 10px; padding: 12px; border-top: 3px solid var(--mint); background: var(--bg); }
+  button {
+    font-family: 'Montserrat', Arial, sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 2px;
+    color: #fff; background: var(--dark); border: 0; padding: 10px 14px; cursor: pointer;
+  }
+  button.ghost { background: transparent; color: var(--dark); border: 2px solid var(--dark); padding: 8px 12px; }
+  button:focus-visible { outline: 3px solid var(--mint); outline-offset: 2px; }
+  .ar-btn { position: absolute; right: 14px; bottom: 74px; }
+
+  .missing { position: absolute; inset: 0 0 64px 0; display: none; align-items: center; justify-content: center; text-align: center; padding: 24px; background: rgba(247, 251, 250, 0.94); }
+  .missing.show { display: flex; }
+  .missing p { max-width: 42ch; margin: 0 0 10px; }
+  .drop-hint { border: 3px dashed var(--teal); padding: 28px; }
+  .viewer-wrap.dragging { outline: 4px dashed var(--teal); outline-offset: -10px; }
+
+  aside { display: flex; flex-direction: column; gap: 18px; }
+  .tag { display: inline-block; font-family: 'Montserrat', Arial, sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 3px; color: var(--bg); background: var(--dark); padding: 2px 10px; margin-bottom: 8px; }
+  .card { background: #FDFEFE; border: 3px solid var(--mint); padding: 18px 20px; }
+  .card h2 { font-family: 'Montserrat', Arial, sans-serif; font-weight: 700; font-size: 18px; color: var(--ink); margin: 0 0 8px; }
+  .card p, .card li { font-size: 15px; line-height: 1.55; text-align: justify; margin: 0; }
+  .card ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+  .dark { background: var(--dark); border-color: var(--dark); }
+  .dark h2 { color: var(--mint); letter-spacing: 2px; }
+  .dark p { color: #E6F4F1; }
+
+  footer { font-size: 13px; color: #3C6E6B; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; border-top: 2px solid var(--mint); padding-top: 14px; }
+  footer a { color: var(--dark); }
+</style>
+</head>
+<body>
+<div class="frame"><div class="frame2">
+
+  <header>
+    <p class="eyebrow">ANTEPROYECTO · DISEÑO INDUSTRIAL · UNINORTE</p>
+    <h1>Reproductor físico de audiolibros sin pantalla</h1>
+    <p class="by">Julián David Martínez Benavides</p>
+  </header>
+
+  <main>
+    <section class="viewer-wrap" id="wrap" aria-label="Visor del modelo 3D">
+      <model-viewer id="mv"
+        src="modelo.glb"
+        alt="Modelo 3D del reproductor de audiolibros: cuerpo de mesa con botón central cóncavo, arcos laterales y corona de volumen"
+        camera-controls
+        touch-action="pan-y"
+        auto-rotate
+        auto-rotate-delay="1500"
+        rotation-per-second="18deg"
+        interaction-prompt="auto"
+        shadow-intensity="1"
+        shadow-softness="0.8"
+        exposure="1.05"
+        environment-image="neutral"
+        camera-orbit="30deg 70deg auto"
+        ar ar-modes="webxr scene-viewer quick-look">
+        <button slot="ar-button" class="ar-btn">VER EN TU ESPACIO (AR)</button>
+      </model-viewer>
+
+      <div class="missing" id="missing" role="status">
+        <div class="drop-hint">
+          <p><b>No se encontró <code>modelo.glb</code>.</b></p>
+          <p>Súbelo a la misma carpeta que este archivo, o arrastra aquí un archivo <code>.glb</code> para verlo.</p>
+          <button type="button" class="ghost" id="pick">ELEGIR ARCHIVO</button>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <button type="button" id="rotate">PAUSAR GIRO</button>
+        <button type="button" class="ghost" id="reset">RESTABLECER VISTA</button>
+        <button type="button" class="ghost" data-orbit="0deg 75deg auto">FRENTE</button>
+        <button type="button" class="ghost" data-orbit="0deg 0deg auto">ARRIBA</button>
+        <button type="button" class="ghost" data-orbit="90deg 80deg auto">LADO</button>
+        <input type="file" id="file" accept=".glb,.gltf,model/gltf-binary" hidden>
+      </div>
+    </section>
+
+    <aside>
+      <div class="card dark">
+        <h2>CONCEPTO</h2>
+        <p>Un dispositivo de mesa para escuchar y navegar audiolibros sin mirar una pantalla. Cada control se reconoce por su forma y confirma la acción con vibración y sonido.</p>
+      </div>
+
+      <div class="card">
+        <span class="tag">01</span>
+        <h2>Controles por forma</h2>
+        <ul>
+          <li><b>Botón central cóncavo:</b> reproducir y pausar.</li>
+          <li><b>Arcos convexos laterales:</b> adelantar y retroceder.</li>
+          <li><b>Corona dentada giratoria:</b> volumen.</li>
+          <li><b>Puertos:</b> microSD, USB-C y jack de audífonos.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <span class="tag">02</span>
+        <h2>Para quién</h2>
+        <p>Jóvenes de 18 a 24 años que escuchan audiolibros mientras estudian y quieren controlar la reproducción sin desbloquear el celular ni romper la concentración.</p>
+      </div>
+
+      <div class="card">
+        <span class="tag">03</span>
+        <h2>Cómo verlo</h2>
+        <p>Arrastra para girar, pellizca o usa la rueda para acercar. En el celular, toca «Ver en tu espacio» para ponerlo sobre tu mesa en realidad aumentada.</p>
+      </div>
+    </aside>
+  </main>
+
+  <footer>
+    <span>Universidad del Norte · Programa de Diseño Industrial · 2026</span>
+    <span>Visor: <a href="https://modelviewer.dev" target="_blank" rel="noopener">model-viewer</a></span>
+  </footer>
+
+</div></div>
+
+<script>
+  const mv = document.getElementById('mv');
+  const missing = document.getElementById('missing');
+  const wrap = document.getElementById('wrap');
+  const fileInput = document.getElementById('file');
+  const rotateBtn = document.getElementById('rotate');
+  const startOrbit = mv.getAttribute('camera-orbit');
+
+  mv.addEventListener('error', () => missing.classList.add('show'));
+  mv.addEventListener('load', () => missing.classList.remove('show'));
+
+  rotateBtn.addEventListener('click', () => {
+    const on = mv.hasAttribute('auto-rotate');
+    on ? mv.removeAttribute('auto-rotate') : mv.setAttribute('auto-rotate', '');
+    rotateBtn.textContent = on ? 'REANUDAR GIRO' : 'PAUSAR GIRO';
+  });
+
+  document.getElementById('reset').addEventListener('click', () => {
+    mv.cameraOrbit = startOrbit;
+    mv.fieldOfView = 'auto';
+    mv.jumpCameraToGoal();
+  });
+
+  document.querySelectorAll('[data-orbit]').forEach(b =>
+    b.addEventListener('click', () => {
+      mv.removeAttribute('auto-rotate');
+      rotateBtn.textContent = 'REANUDAR GIRO';
+      mv.cameraOrbit = b.dataset.orbit;
+    }));
+
+  function loadLocal(file) {
+    if (!file || !/\.(glb|gltf)$/i.test(file.name)) return;
+    mv.src = URL.createObjectURL(file);
+  }
+  document.getElementById('pick').addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', e => loadLocal(e.target.files[0]));
+  ['dragenter', 'dragover'].forEach(t => wrap.addEventListener(t, e => { e.preventDefault(); wrap.classList.add('dragging'); }));
+  ['dragleave', 'drop'].forEach(t => wrap.addEventListener(t, e => { e.preventDefault(); wrap.classList.remove('dragging'); }));
+  wrap.addEventListener('drop', e => loadLocal(e.dataTransfer.files[0]));
+</script>
+</body>
+</html>

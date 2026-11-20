@@ -83,7 +83,7 @@
   <main>
     <section class="viewer-wrap" id="wrap" aria-label="Visor del modelo 3D">
       <model-viewer id="mv"
-        src="modelo.glb?v=1"
+        src="modelo.glb?v=2"
         alt="Modelo 3D del reproductor de audiolibros: cuerpo cilíndrico de mesa con banda de tela gris, botón central verde oscuro, dos arcos laterales claros y corona de volumen dentada"
         camera-controls
         touch-action="pan-y"
@@ -95,7 +95,7 @@
         shadow-softness="0.7"
         exposure="1.05"
         environment-image="neutral"
-        camera-orbit="30deg 70deg auto"
+        camera-orbit="20deg 62deg auto"
         ar ar-modes="webxr scene-viewer quick-look">
         <button slot="ar-button" class="ar-btn">VER EN TU ESPACIO (AR)</button>
       </model-viewer>
@@ -111,9 +111,10 @@
       <div class="toolbar">
         <button type="button" id="rotate">PAUSAR GIRO</button>
         <button type="button" class="ghost" id="reset">RESTABLECER VISTA</button>
-        <button type="button" class="ghost" data-orbit="0deg 75deg auto">FRENTE</button>
-        <button type="button" class="ghost" data-orbit="0deg 0deg auto">ARRIBA</button>
-        <button type="button" class="ghost" data-orbit="90deg 80deg auto">LADO</button>
+        <button type="button" class="ghost" data-orbit="0deg 62deg auto">FRENTE</button>
+        <button type="button" class="ghost" data-orbit="0deg 8deg auto">ARRIBA</button>
+        <button type="button" class="ghost" data-orbit="90deg 78deg auto">LADO</button>
+        <button type="button" class="ghost" data-orbit="180deg 75deg auto">PUERTOS</button>
         <input type="file" id="file" accept=".glb,.gltf,model/gltf-binary" hidden>
       </div>
     </section>

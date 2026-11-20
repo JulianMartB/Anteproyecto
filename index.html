@@ -33,12 +33,12 @@
   main { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(280px, 1fr); gap: 32px; align-items: start; }
   @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
 
-  .viewer-wrap { position: relative; background: #fff; border: 3px solid var(--mint); }
+  .viewer-wrap { position: relative; background: radial-gradient(circle at 50% 38%, #EEF8F5 0%, #BFE3DA 55%, #8FC3B8 100%); border: 3px solid var(--mint); }
   model-viewer:not(:defined) > * { display: none; }
   model-viewer {
     display: block;
     width: 100%; height: min(72vh, 680px); min-height: 380px;
-    background: radial-gradient(circle at 50% 40%, #FFFFFF 0%, var(--mint-soft) 100%);
+    background: transparent;
     --poster-color: transparent;
     --progress-bar-color: var(--teal);
   }
@@ -83,16 +83,16 @@
   <main>
     <section class="viewer-wrap" id="wrap" aria-label="Visor del modelo 3D">
       <model-viewer id="mv"
-        src="modelo.glb"
-        alt="Modelo 3D del reproductor de audiolibros: cuerpo de mesa con botón central cóncavo, arcos laterales y corona de volumen"
+        src="modelo.glb?v=1"
+        alt="Modelo 3D del reproductor de audiolibros: cuerpo cilíndrico de mesa con banda de tela gris, botón central verde oscuro, dos arcos laterales claros y corona de volumen dentada"
         camera-controls
         touch-action="pan-y"
         auto-rotate
         auto-rotate-delay="1500"
         rotation-per-second="18deg"
         interaction-prompt="auto"
-        shadow-intensity="1"
-        shadow-softness="0.8"
+        shadow-intensity="1.3"
+        shadow-softness="0.7"
         exposure="1.05"
         environment-image="neutral"
         camera-orbit="30deg 70deg auto"
